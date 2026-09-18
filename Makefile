@@ -27,9 +27,16 @@ DIR_objs     = objs
 USRINCFLAGS  = -I$(MODELPATH)
 USRNVCCFLAGS =  $(MAX_REGISTERS)
 
-LIBS     = -lfsl-warpfns -lfsl-basisfield -lfsl-meshclass -lfsl-newimage \
-           -lfsl-utils -lfsl-miscmaths -lfsl-newran -lfsl-NewNifti \
-           -lfsl-znz -lfsl-cprob -lboost_filesystem -lboost_system
+# Run make gencode=75 to compile only
+# for compute capability 75 (change
+# to suit your hardware)
+ifdef gencode
+  GENCODEFLAGS := -gencode arch=compute_${gencode},code=sm_${gencode}
+endif
+
+LIBS     = -lfsl-basisfield -lfsl-warpfns -lfsl-miscmaths \
+           -lfsl-newimage -lfsl-NewNifti -lfsl-utils \
+           -lboost_filesystem -lboost_system
 CUDALIBS = -lcurand
 
 OBJS    := modelparameters.o init_gpu.o dMRI_Data.o Model.o Parameters.o \
